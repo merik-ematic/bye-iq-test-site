@@ -954,7 +954,27 @@
 	    })(window,document,'script','//api.ematicsolutions.com/v1/ematic.min.js','ematics');
 
 	    //initialize
-	    ematics("create", '96e3989a365811e9a93d0242ac110002-sg3', {});
+	    ematics("create", '96e3989a365811e9a93d0242ac110002-sg3', {
+				country_iso: "TW",
+				currency_iso: "TWD",
+				language_iso: "en",
+				events: {
+					onBeforeShowOverlay: function(toIndex, overlayCount) {
+						console.log('onBeforeShowOverlay', toIndex, overlayCount);
+						return true;
+					},
+					onAfterSubscribe: function(email, error, errorMessage, exists, mergeVars) {
+						document.querySelectorAll('a[href*="https://google.com"]').forEach(function(btn) {
+							btn.addEventListener('click', function(e) {
+								fetch('https://us-central1-ematic-tw-es.cloudfunctions.net/cfDemo1?email=' + encodeURIComponent(email))
+								console.log('btn clicked');
+							});
+						});
+						console.log('onAfterSubscribe', email, error, errorMessage, exists, mergeVars);
+						return true;
+					}
+				}
+			});
 	</script>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
